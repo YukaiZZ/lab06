@@ -37,7 +37,7 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      * a generic-type Map:  think of what type of keys and values would best suit the requirements
      */
  
-    private Map<String,List<User>> groups = new HashMap<>();
+    private Map<String,List<U>> groups = new HashMap<>();
     
 
     /*
@@ -82,14 +82,12 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      *
      * Implements the methods below
      */
-    public void theUserIhavefollowed (final String groupName){
-
-    }
+   
     @Override
     public boolean addFollowedUser(final String circle, final U user) {
 
         if(groups.isEmpty() || groups.get(circle)== null){
-            groups.put(circle,new ArrayList<User>());
+            groups.put(circle,new ArrayList<U>());
             groups.get(circle).add(user);
             return true;
         }
@@ -108,17 +106,17 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      */
     @Override
     public Collection<U> getFollowedUsersInGroup(final String groupName) {
-        List<User> theFollowesIngroup = groups.get(groupName);
+        List<U> theFollowesIngroup = groups.get(groupName);
 
         if(theFollowesIngroup != null){
-           return new ArrayList<>(theFollowesIngroup); 
+           return new ArrayList<U>(theFollowesIngroup); 
         }
-        return theFollowesIngroup;
+        return Collections.emptyList();
     }
 
     @Override
     public List<U> getFollowedUsers() {
-        List<User> allFollowers = new ArrayList<>();
+        List<U> allFollowers = new ArrayList<>();
 
         for (String groupName : groups.keySet()) {
             allFollowers.addAll(getFollowedUsersInGroup(groupName));

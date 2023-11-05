@@ -36,6 +36,9 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      * In order to save the people followed by a user organized in groups, adopt
      * a generic-type Map:  think of what type of keys and values would best suit the requirements
      */
+ 
+    private Map<String,List<User>> groups = new HashMap<>();
+    
 
     /*
      * [CONSTRUCTORS]
@@ -48,6 +51,8 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      * - username
      * - age and every other necessary field
      */
+   
+
     /**
      * Builds a user participating in a social network.
      *
@@ -62,21 +67,38 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      *            application
      */
     public SocialNetworkUserImpl(final String name, final String surname, final String user, final int userAge) {
-        super(null, null, null, 0);
+        super(name, surname, user, userAge);
     }
 
     /*
      * 2) Define a further constructor where the age defaults to -1
      */
+    public SocialNetworkUserImpl(final String name, final String surname, final String user) {
+        super(name, surname, user);
+    }
 
     /*
      * [METHODS]
      *
      * Implements the methods below
      */
+    public void theUserIhavefollowed (final String groupName){
+
+    }
     @Override
     public boolean addFollowedUser(final String circle, final U user) {
+
+        if(groups.isEmpty() || groups.get(circle)== null){
+            groups.put(circle,new ArrayList<User>());
+            groups.get(circle).add(user);
+            return true;
+        }
+        if(groups.get(circle) != null && !groups.get(circle).contains(user)){
+            groups.get(circle).add(user);
+            return true;
+        }
         return false;
+      
     }
 
     /**
@@ -86,11 +108,21 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      */
     @Override
     public Collection<U> getFollowedUsersInGroup(final String groupName) {
-        return null;
+        List<User> theFollowesIngroup = groups.get(groupName);
+
+        if(theFollowesIngroup != null){
+           return new ArrayList<>(theFollowesIngroup); 
+        }
+        return theFollowesIngroup;
     }
 
     @Override
     public List<U> getFollowedUsers() {
-        return null;
+        List<User> allFollowers = new ArrayList<>();
+
+        for (String groupName : groups.keySet()) {
+            allFollowers.addAll(getFollowedUsersInGroup(groupName));
+        }
+        return allFollowers;
     }
 }

@@ -173,11 +173,11 @@ public final class UseListsAndMaps {
         /*
          * 8) Compute the population of the world
          */
-        long worldPopulation = 0;
+        long worldPopulations = 0;
         for (Long population : map.values()) {
-            worldPopulation += population;
+            worldPopulations += population;
         }
 
-        System.out.print("The world population is : " + worldPopulation);
+        System.out.print("The world population is : " + worldPopulations);
     }
 }
